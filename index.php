@@ -38,28 +38,36 @@
         ]
     ];
 
-    function filterByAuthor($books, $author){
-        $filteredBooks = [];
 
-        foreach ($books as $book){
-            if ($book['author'] === $author){
-                $filteredBooks[] = $book;
+    // Lamda function
+
+    function filter($items, $fn){
+        $filteredItems = [];
+
+        foreach ($items as $item){
+            if ($fn($item)){
+                $filteredItems[] = $item;
             }
         }
-        return $filteredBooks;
+        return $filteredItems;
     }
+
+    $filteredBooks = array_filter($books, function($book){
+        return $book['author'] === 'Andy Weir';
+    });
 
 ?>
 
 <h1>Recommended Books</h1>
 
 <ul>
-    <?php foreach (filterByAuthor($books, 'Andy Weir') as $book) : ?>
-            <a href="<?php echo $book['purchaseUrl'] ?>">
-                <li>
-                    <?= $book['name']; ?> (<?= $book['releaseYear']; ?>)
-                </li>
-            </a>
+    <?php foreach ($filteredBooks as $book) : ?>
+    <li>
+        <a href="<?php echo $book['purchaseUrl'] ?>">
+            <?= $book['name']; ?> (<?= $book['releaseYear']; ?>)
+        </a>
+    </li>
+
 
     <?php endforeach; ?>
 </ul>
